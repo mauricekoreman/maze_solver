@@ -1,4 +1,4 @@
-from graphics import Window, Line, Point, Cell
+from graphics import Window
 from maze import Maze
 
 if __name__ == "__main__":
