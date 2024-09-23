@@ -24,6 +24,7 @@ class Maze:
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
+        self._reset_cell_visited()
 
     def _create_cells(self):
         # fills _cells with list of cells. Each top-level list is a column of Cell objects.
@@ -71,9 +72,7 @@ class Maze:
 
     def _break_walls_r(self, i, j):
         # DFS through cells
-
-        cur_cell = self._cells[i][j]
-        cur_cell.visited = True
+        self._cells[i][j].visited = True
 
         while True:
             to_visit = []
@@ -116,5 +115,9 @@ class Maze:
                 self._cells[i][j + 1].has_left_wall = False
 
             # visit next cell
-            print(next_idx)
             self._break_walls_r(next_idx[0], next_idx[1])
+
+    def _reset_cell_visited(self):
+        for row in self._cells:
+            for cell in row:
+                cell.visited = False
