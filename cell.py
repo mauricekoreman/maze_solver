@@ -4,17 +4,18 @@ from graphics import Window, Point, Line
 class Cell:
 
     def __init__(self, win: Window = None):
+        self.win = win
+
         self.has_left_wall = True
         self.has_right_wall = True
         self.has_top_wall = True
         self.has_bottom_wall = True
+        self.visited = False
 
         self._x1 = None
         self._y1 = None
         self._x2 = None
         self._y2 = None
-
-        self.win = win
 
     def draw(self, x1, y1, x2, y2):
         self._x1 = x1
@@ -27,18 +28,30 @@ class Cell:
         bottom_left = Point(x1, y2)
         bottom_right = Point(x2, y2)
 
+        left_wall = Line(top_left, bottom_left)
+        right_wall = Line(top_right, bottom_right)
+        top_wall = Line(top_left, top_right)
+        bottom_wall = Line(bottom_left, bottom_right)
+
         if self.has_left_wall:
-            line = Line(top_left, bottom_left)
-            self.win.draw_line(line)
-        if self.has_top_wall:
-            line = Line(top_left, top_right)
-            self.win.draw_line(line)
+            self.win.draw_line(left_wall)
+        else:
+            self.win.draw_line(left_wall, "white")
+
         if self.has_right_wall:
-            line = Line(top_right, bottom_right)
-            self.win.draw_line(line)
+            self.win.draw_line(right_wall)
+        else:
+            self.win.draw_line(right_wall, "white")
+
+        if self.has_top_wall:
+            self.win.draw_line(top_wall)
+        else:
+            self.win.draw_line(top_wall, "white")
+
         if self.has_bottom_wall:
-            line = Line(bottom_left, bottom_right)
-            self.win.draw_line(line)
+            self.win.draw_line(bottom_wall)
+        else:
+            self.win.draw_line(bottom_wall, "white")
 
     def draw_move(self, to_cell, undo=False):
         # draw from the center of itself, to the center of another cell
