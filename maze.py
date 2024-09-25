@@ -121,3 +121,67 @@ class Maze:
         for row in self._cells:
             for cell in row:
                 cell.visited = False
+
+    def solve(self):
+        return self._solve_r(0, 0)
+
+    def _solve_r(self, i, j):
+        # DFS trough cells
+        self._animate()
+        cur_cell = self._cells[i][j]
+        cur_cell.visited = True
+
+        # end cell index
+        if i == self.num_rows - 1 and j == self.num_cols - 1:
+            return True
+
+        # above
+        if i > 0 and not cur_cell.has_top_wall and not self._cells[i - 1][j].visited:
+            cur_cell.draw_move(self._cells[i - 1][j])
+            res = self._solve_r(i - 1, j)
+
+            if res == True:
+                return True
+            else:
+                cur_cell.draw_move(self._cells[i - 1][j], True)
+
+        # below
+        if (
+            i < self.num_rows - 1
+            and not cur_cell.has_bottom_wall
+            and not self._cells[i + 1][j].visited
+        ):
+            cur_cell.draw_move(self._cells[i + 1][j])
+            res = self._solve_r(i + 1, j)
+
+            if res == True:
+                return True
+            else:
+                cur_cell.draw_move(self._cells[i + 1][j], True)
+
+        # left
+        if j > 0 and not cur_cell.has_left_wall and not self._cells[i][j - 1].visited:
+            cur_cell.draw_move(self._cells[i][j - 1])
+            res = self._solve_r(i, j - 1)
+
+            if res == True:
+                return True
+            else:
+                cur_cell.draw_move(self._cells[i][j - 1], True)
+
+        # right
+        if (
+            j < self.num_cols - 1
+            and not cur_cell.has_right_wall
+            and not self._cells[i][j + 1].visited
+        ):
+            cur_cell.draw_move(self._cells[i][j + 1])
+            res = self._solve_r(i, j + 1)
+
+            if res == True:
+                return True
+            else:
+                cur_cell.draw_move(self._cells[i][j + 1], True)
+
+        # if none of the conditions above worked out
+        return False
